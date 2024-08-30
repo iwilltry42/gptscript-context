@@ -6,7 +6,13 @@ import os
 
 
 async def main():
-    histories = json.loads(os.getenv("GPTSCRIPT_CONTEXT", "{}"))
+    histories_str = os.getenv("GPTSCRIPT_CONTEXT", "")
+
+    if not histories_str:
+        print("<USER_MESSAGES></USER_MESSAGES>")
+        return
+
+    histories = json.loads(histories_str)
 
     limit = int(os.getenv("LIMIT", "50"))
 
