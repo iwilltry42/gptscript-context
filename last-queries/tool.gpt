@@ -1,5 +1,6 @@
 Name: Last User Input Overview
 Description: Get an overview over the last user inputs in the current chat
 Context: sys.chat.current
+Param: Limit: How many entries should be returned
 
 #!/usr/bin/env python3 ${GPTSCRIPT_TOOL_DIR}/history.py

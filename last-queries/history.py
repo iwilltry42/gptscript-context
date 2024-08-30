@@ -7,7 +7,11 @@ import os
 
 async def main():
     histories = json.loads(os.getenv("GPTSCRIPT_CONTEXT", "{}"))
+
+    limit = int(os.getenv("LIMIT", "50"))
+
     chat = ["<USER_MESSAGES>"]
+    msgs = []
 
     completion = histories.get("completion", {})
 
@@ -19,8 +23,18 @@ async def main():
             [part["text"] for part in message.get("content", []) if "text" in part]
         )
         if role == "user" and len(text) > 0 and not text.startswith("Call "):
-            chat.append(f"[User Message #{i}] {text}")
+            msgs.append(f"[User Message #{i}] {text}")
             i += 1
+
+    if limit > len(msgs):
+        limit = len(msgs)
+
+    if limit == 0:
+        for msg in msgs:
+            chat.append(msg)
+    else:
+        for msg in msgs[-limit:]:
+            chat.append(msg)
 
     chat.append("</USER_MESSAGES>")
     print("\n".join(chat))
